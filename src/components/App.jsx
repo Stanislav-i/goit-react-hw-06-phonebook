@@ -1,14 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 import { nanoid } from 'nanoid';
 import { ContactList } from './ContactList/ContactList';
 import { ContactForm } from './ContactForm/ContactForm';
 import { Filter } from './Filter/Filter';
+
+import { useSelector, useDispatch} from 'react-redux';
+import { addContact } from 'redux/contactsSlice';
 // import defaultContacts from '../data/defaultContacts';
 
 export const App = () => {
-  const [contacts, setContacts] = useState(() => {
-    return JSON.parse(window.localStorage.getItem('contacts')) ?? [];
-  });
+  // const [contacts, setContacts] = useState(() => {
+  //   return JSON.parse(window.localStorage.getItem('contacts')) ?? [];
+  // });
+
+  const contacts = useSelector(state => state.contacts);
+  const dispatch = useDispatch();
+
   const [filter, setFilter] = useState('');
 
   const nameInputId = nanoid();
@@ -25,6 +32,7 @@ export const App = () => {
     const name = form.elements.name.value;
     const number = form.elements.number.value;
     const contactId = nanoid();
+
     if (
       contacts.some(
         contact => contact.name.toLocaleLowerCase() === name.toLocaleLowerCase()
@@ -32,20 +40,21 @@ export const App = () => {
     ) {
       alert(`${name} is already in contacts`);
     } else {
-      addContact(contactId, name, number);
+      // addContact(contactId, name, number);
+      dispatch(addContact({id: contactId, name: name, number: number}));
     }
     form.reset();
   };
 
-  const addContact = (contactId, name, number) => {
-    const contact = {
-      id: contactId,
-      name,
-      number,
-    };
+  // const addContact = (contactId, name, number) => {
+  //   const contact = {
+  //     id: contactId,
+  //     name,
+  //     number,
+  //   };
 
-    setContacts([contact, ...contacts]);
-  };
+  //   setContacts([contact, ...contacts]);
+  // };
 
   const getFilteredContacts = () => {
     const normalizedFilter = filter.toLocaleLowerCase();
@@ -54,13 +63,13 @@ export const App = () => {
     );
   };
 
-  const deleteContact = contactId => {
-    setContacts(contacts.filter(contact => contact.id !== contactId));
-  };
+  // const deleteContact = contactId => {
+  //   setContacts(contacts.filter(contact => contact.id !== contactId));
+  // };
 
-  useEffect(() => {
-    localStorage.setItem('contacts', JSON.stringify(contacts));
-  }, [contacts]);
+  // useEffect(() => {
+  //   localStorage.setItem('contacts', JSON.stringify(contacts));
+  // }, [contacts]);
 
   return (
     <div
@@ -87,7 +96,6 @@ export const App = () => {
 
       <ContactList
         contactList={getFilteredContacts()}
-        onDeleteContact={deleteContact}
       />
     </div>
   );
