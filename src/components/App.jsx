@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React from 'react';
 import { nanoid } from 'nanoid';
 import { ContactList } from './ContactList/ContactList';
 import { ContactForm } from './ContactForm/ContactForm';
@@ -6,6 +6,9 @@ import { Filter } from './Filter/Filter';
 
 import { useSelector, useDispatch} from 'react-redux';
 import { addContact } from 'redux/contactsSlice';
+import { setFilterValue } from 'redux/filterSlice';
+
+
 // import defaultContacts from '../data/defaultContacts';
 
 export const App = () => {
@@ -14,16 +17,22 @@ export const App = () => {
   // });
 
   const contacts = useSelector(state => state.contacts);
+  const filter = useSelector(state => state.filter)
   const dispatch = useDispatch();
 
-  const [filter, setFilter] = useState('');
+  // console.log(filter)
+  // console.log(contacts)
+
+  // const [filter, setFilter] = useState('');
 
   const nameInputId = nanoid();
   const numberInputId = nanoid();
   const searchInputId = nanoid();
 
   const handleFilterChange = e => {
-    setFilter(e.target.value);
+    const userQuery = e.target.value;
+    // setFilter(e.target.value);
+    dispatch(setFilterValue(userQuery));
   };
 
   const handleSubmit = e => {
