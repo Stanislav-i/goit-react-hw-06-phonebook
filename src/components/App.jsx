@@ -4,26 +4,14 @@ import { ContactList } from './ContactList/ContactList';
 import { ContactForm } from './ContactForm/ContactForm';
 import { Filter } from './Filter/Filter';
 
-import { useSelector, useDispatch} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { addContact } from 'redux/contactsSlice';
 import { setFilterValue } from 'redux/filterSlice';
 
-
-// import defaultContacts from '../data/defaultContacts';
-
 export const App = () => {
-  // const [contacts, setContacts] = useState(() => {
-  //   return JSON.parse(window.localStorage.getItem('contacts')) ?? [];
-  // });
-
   const contacts = useSelector(state => state.contacts.data);
-  const filter = useSelector(state => state.filter)
+  const filter = useSelector(state => state.filter);
   const dispatch = useDispatch();
-
-  // console.log(filter)
-  // console.log(contacts)
-
-  // const [filter, setFilter] = useState('');
 
   const nameInputId = nanoid();
   const numberInputId = nanoid();
@@ -31,7 +19,6 @@ export const App = () => {
 
   const handleFilterChange = e => {
     const userQuery = e.target.value;
-    // setFilter(e.target.value);
     dispatch(setFilterValue(userQuery));
   };
 
@@ -49,21 +36,10 @@ export const App = () => {
     ) {
       alert(`${name} is already in contacts`);
     } else {
-      // addContact(contactId, name, number);
-      dispatch(addContact({id: contactId, name: name, number: number}));
+      dispatch(addContact({ id: contactId, name: name, number: number }));
     }
     form.reset();
   };
-
-  // const addContact = (contactId, name, number) => {
-  //   const contact = {
-  //     id: contactId,
-  //     name,
-  //     number,
-  //   };
-
-  //   setContacts([contact, ...contacts]);
-  // };
 
   const getFilteredContacts = () => {
     const normalizedFilter = filter.toLocaleLowerCase();
@@ -71,14 +47,6 @@ export const App = () => {
       contact.name.toLocaleLowerCase().includes(normalizedFilter)
     );
   };
-
-  // const deleteContact = contactId => {
-  //   setContacts(contacts.filter(contact => contact.id !== contactId));
-  // };
-
-  // useEffect(() => {
-  //   localStorage.setItem('contacts', JSON.stringify(contacts));
-  // }, [contacts]);
 
   return (
     <div
@@ -103,9 +71,7 @@ export const App = () => {
 
       <Filter id={searchInputId} value={filter} onChange={handleFilterChange} />
 
-      <ContactList
-        contactList={getFilteredContacts()}
-      />
+      <ContactList contactList={getFilteredContacts()} />
     </div>
   );
 };
